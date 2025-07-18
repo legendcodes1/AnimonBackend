@@ -3,12 +3,13 @@ const router = express.Router();
 
 // ✅ CREATE manga (POST /mangas)
 router.post("/", async (req, res, next) => {
-  const { title, author, genre } = req.body; // receive from frontend form
+  const { Name, Chapters, Genre, Image, Status } = req.body; // receive from frontend form
 
   try {
     const { data, error } = await req.supabase
       .from("manga")
-      .insert([{ title, author, genre }]); // insert using variables
+      .insert([{ Name, Chapters, Genre, Image, Status }])
+      .select("*"); // insert using variables
 
     if (error) throw error;
     res.status(201).json(data);
@@ -31,12 +32,12 @@ router.get("/", async (req, res, next) => {
 // ✅ UPDATE manga by id (PUT /mangas/:id)
 router.put("/:id", async (req, res, next) => {
   const { id } = req.params;
-  const { title, author, genre } = req.body;
+  const { Name, Chapters, Genre, Image, Status } = req.body;
 
   try {
     const { data, error } = await req.supabase
       .from("manga")
-      .update({ title, author, genre })
+      .update({ Name, Chapters, Genre, Image, Status })
       .eq("id", id);
 
     if (error) throw error;

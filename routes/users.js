@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  const { data, error } = await req.supabase.from("Anime").select("*");
+  const { data, error } = await req.supabase.from("User").select("*");
 
   try {
     if (error) throw error;
@@ -13,11 +13,11 @@ router.get("/", async (req, res, next) => {
 });
 
 router.put("/:id", async (req, res, next) => {
-  const { Name, Episodes, Genre, Image, Status } = req.body;
+  const { Username, Password, Email } = req.body;
   try {
     const { data, error } = await req.supabase
       .from("User")
-      .update({ Name, Episodes, Genre, Image, Status })
+      .update({ Username, Password, Email })
       .eq("id", id)
       .select("*");
 
@@ -29,12 +29,12 @@ router.put("/:id", async (req, res, next) => {
 });
 
 router.post("/", async (req, res) => {
-  const { Name, Episodes, Genre, Image, Status } = req.body;
+  const { Username, Password, Email } = req.body;
 
   try {
     const { data, error } = await req.supabase
-      .from("Anime")
-      .insert([{ Name, Episodes, Genre, Image, Status }])
+      .from("User")
+      .insert([{ Username, Password, Email }])
       .select("*");
     if (error) throw error;
     res.status(201).json(data);
@@ -48,7 +48,7 @@ router.delete("/:id", async (req, res, next) => {
 
   try {
     const { data, error } = await req.supabase
-      .from("Anime")
+      .from("User")
       .delete()
       .eq("id", id);
 
@@ -58,4 +58,5 @@ router.delete("/:id", async (req, res, next) => {
     next(err);
   }
 });
+
 module.exports = router;

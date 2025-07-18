@@ -33,9 +33,10 @@ app.use((req, res, next) => {
 });
 
 // Use routes
+app.use("/mangas", mangasRouter);
+
 app.use("/users", usersRouter);
 app.use("/animes", animesRouter);
-app.use("/mangas", mangasRouter);
 
 // Root route
 app.get("/", (req, res) => {
