@@ -10,8 +10,11 @@ require("dotenv").config();
 // Get all users (for testing/debugging; be careful exposing this in production)
 router.get("/", async (req, res, next) => {
   try {
-    const { data, error } = await req.supabase.from("User").select("*");
-    if (error) throw error;
+    const { data, error } = await req.supabase.from("Users").select("*");
+    if (error) {
+      console.error("REAL ERROR:", error); 
+      throw error;
+    }
     res.json(data);
   } catch (error) {
     next(error);
@@ -32,7 +35,7 @@ router.put("/:id", async (req, res, next) => {
     }
 
     const { data, error } = await req.supabase
-      .from("User")
+      .from("Users")
       .update(updateData)
       .eq("id", id)
       .select("*");
@@ -58,8 +61,8 @@ router.post("/register", async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const { data, error } = await req.supabase
-      .from("User")
-      .insert([{ Username: username, Password: hashedPassword, Email: email }])
+      .from("Users")
+      .insert([{ username: username, password: hashedPassword, email: email }])
       .select("*");
 
     if (error) throw error;
@@ -76,22 +79,22 @@ router.post("/login", async (req, res, next) => {
 
   try {
     const { data, error } = await req.supabase
-      .from("User")
+      .from("Users")
       .select("*")
-      .eq("Email", email) // Supabase column 'Email' probably capitalized, keep as is here
+      .eq("email", email)
       .single();
 
     if (error || !data) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const passwordMatch = await bcrypt.compare(password, data.Password);
+    const passwordMatch = await bcrypt.compare(password, data.password);
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const token = jwt.sign(
-      { id: data.id, email: data.Email },
+      { id: data.id, email: data.email },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -123,7 +126,7 @@ const authenticate = (req, res, next) => {
 router.get("/me", authenticate, async (req, res) => {
   try {
     const { data, error } = await req.supabase
-      .from("User")
+      .from("Users")
       .select("id, Username, Email")
       .eq("id", req.user.id)
       .single();
@@ -141,7 +144,7 @@ router.delete("/:id", async (req, res, next) => {
 
   try {
     const { data, error } = await req.supabase
-      .from("User")
+      .from("Users")
       .delete()
       .eq("id", id);
 
