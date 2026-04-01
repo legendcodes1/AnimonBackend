@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import {createClient} from "@supabase/supabase-js";
 import { userService } from "./services/userServices.js";
 import { userController } from "./controllers/userController.js";
+import { clubsController } from './controllers/clubsController.js';
 
 dotenv.config();
 

@@ -1,6 +1,8 @@
 import type {User} from '../types/user.type'
+import { SupabaseClient } from '@supabase/supabase-js';
 
-export const userRepository = (supabaseClient) => ({
+
+export const userRepository = (supabaseClient: SupabaseClient) => ({
     findAllUsers: async (): Promise<User[]> => {
         const { data, error } = await supabaseClient.from("Users").select("*");
         if (error) {
@@ -9,16 +11,18 @@ export const userRepository = (supabaseClient) => ({
         return data;
     },
 
-    createUser: async (userData: { username: string; email: string; password: string }): Promise<User> => {
+    createUser: async (userData: { email: string; password: string }) => {
         const { data, error } = await supabaseClient
-            .from("Users")
-            .insert([userData])
-            .select("*");
+            .auth
+            .signUp({
+                email: userData.email,
+                password: userData.password
+            })
         
         if (error) {
             throw error;
         }
-        return data[0];
+       return data;
     },
 
     findUserById: async (id: string): Promise<User | null> => {

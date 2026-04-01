@@ -1,8 +1,11 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { userRepository } from "../repositories/userRepository";
+import { SupabaseClient } from '@supabase/supabase-js';
 
-export const userService = (supabaseClient) => {
+
+
+export const userService = (supabaseClient: SupabaseClient) => {
   const repo = userRepository(supabaseClient);
 
   return {
