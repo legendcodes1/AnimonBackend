@@ -1,8 +1,8 @@
 import { Router } from "express"
-import groupRouter from "./groups"
-import LibraryRouter from "./library"
+import clubsRouter from "./clubsRouter.js"
 const router = Router()
 
 
-router.use(LibraryRouter)
-router.use(groupRouter)
+router.use("/clubs", clubsRouter)
+
+export default router;

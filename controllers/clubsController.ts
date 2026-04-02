@@ -1,42 +1,54 @@
 import express, { type Request, type Response, type NextFunction } from 'express';
+import { clubsService } from '../services/clubsService';
+import { supabase} from '../db/supabaseClient'
+import type { User} from '../types/user.type';
+import type { Club } from '../types/club.type';
 
-export const clubsController = ()  =>  
+interface  IclubsController {
+  getClubs : (req: Request, res: Response) => any ,
+  createClubs : (req: Request, res: Response) => any,
+  joinClub : (req: Request, res: Response) => any,
+  deleteClub : (req: Request, res: Response) => any,
+}
+export const clubsController = () : IclubsController =>  
     ({
-        createClubs : ( async (req, res) => {
-          try {
-            // Extract userId from token (try multiple possible keys)
-            const userId = req.user.id || req.user.userId || req.user.sub;
+
+      getClubs : async(req, res) => {
+        const result = await clubsService.getClubs(supabase)
+        return res.json(result);
         
+      },
+        createClubs: async (req: Request, res: Response) => {
+   
+         
+            const userId = req.body.clubId
             if (!userId) {
-              console.warn("User ID missing in JWT:", req.user);
               return res.status(400).json({ message: "User ID missing in token" });
             }
+            
+            const result = await clubsService.createClubs(userId, supabase, req.body)
+            
+            return res.json(result)
+     
+        },
         
-            // Fetch user's group memberships
-            const { data, error } = await req.supabase
-              .from("Groups_Members")
-              .select(`
-                role,
-                Groups (
-                  id,
-                  name,
-                  description,
-                  group_avatar_url,
-                  created_by
-                )
-              `)
-              .eq("user_id", userId);
-        
-            if (error) {
-              console.error("Supabase fetch error:", error);
-              return res.status(500).json({ message: "Failed to fetch groups", details: error.message });
-            }
-        
-            // Return groups data
-            res.json(data);
-          } catch (err) {
-            console.error("GET /groups unexpected error:", err);
-            res.status(500).json({ message: "Internal server error", details: err.message });
+        joinClub : async (req, res) => {
+          if(!req.body.userId){
+            return res.status(400).json({ message: "User ID missing in token" });
           }
-        });
+          const result = await clubsService.joinClub(supabase, req.body);
+
+          return res.json(result)
+        },
+
+        deleteClub : async (req: Request, res: Response) => {
+            const groupId = req.body.clubId
+
+            if(!groupId){
+               return res.status(400).json({ message: "Group ID missing in token" });
+            }
+
+            const result = await clubsService.deleteClub(groupId, req.supabase, req.body)
+            res.json(result)
+        }
     })

@@ -1,0 +1,11 @@
+GET http://localhost:3000/clubs
+
+###
+
+POST http://localhost:3000/clubs
+Content-Type: application/json
+
+{
+    "name": "John",
+    "password": "12345"
+}
