@@ -16,7 +16,7 @@ app.use(morgan("dev"));
 
 
 
-app.use(bigRouter)
+app.use("/api", bigRouter)
 
 
 app.get("/", (req, res) => {
