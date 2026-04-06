@@ -21,13 +21,17 @@ export const clubsController = () : IclubsController =>
         createClubs: async (req: Request, res: Response) => {
    
          
-            const userId = req.body.clubId
+            const userId = req.body.userId
+            console.log("Creating club with:", { userId, body: req.body })
             if (!userId) {
               return res.status(400).json({ message: "User ID missing in token" });
             }
             
             const result = await clubsService.createClubs(userId, supabase, req.body)
-            
+             if (!result) {
+              return res.status(500).json({ error: "Club service returned undefined" });
+            }
+    
             return res.json(result)
      
         },

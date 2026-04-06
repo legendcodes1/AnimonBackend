@@ -8,9 +8,10 @@ export const clubRepository = {
         .select()
     },
     insertClub : async(userId: string, supabase:any, clubData:any) => {
+        const { userId: _, createdBy: __, ...cleanData } = clubData;
         return  await supabase
         .from('Groups')
-        .insert({ ...clubData, created_by: userId })
+        .insert({ ...cleanData, created_by: userId })
         .select()
     },
     joinClub : async(supabase:any, clubData:any) => {

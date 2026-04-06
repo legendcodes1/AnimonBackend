@@ -14,6 +14,7 @@ export const clubsService = {
         createClubs : async (userId: string, supabase: any, payload: any) => {
             const {data, error} = await clubRepository.insertClub(userId, supabase, payload)
             if(error){
+                console.log(error)
                 throw error;
             }
             return data;

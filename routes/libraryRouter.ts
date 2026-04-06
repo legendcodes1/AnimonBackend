@@ -10,6 +10,16 @@ router.get("/",
   controller.getLibrary
 );
 
+router.post("/", 
+  controller.createLibraryItem
+)
+
+router.put("/:id", 
+  controller.editLibraryItem
+)
+router.delete("/:id", 
+  controller.deleteLibraryItem
+)
 // ---------------- CREATE A NEW GROUP ----------------
 
 
