@@ -11,7 +11,7 @@ export const libraryService = {
         return data;
     } ,
 
-    createLibraryItem : async(supabase: any, userId: string, payload: any) => {
+    createLibraryItem : async(supabase: any, userId: any, payload: any) => {
         const cleanedData = {
             ...payload,
             rating: payload.rating ? parseFloat(payload.rating) : null,

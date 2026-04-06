@@ -30,7 +30,7 @@ export const libraryController = () : ILibraryController =>
     },
      createLibraryItem : async (req, res) => {
       try {
-        const userId = req.body.user_id;
+        const userId = req.query.user_id;
         console.log("Creating item for:", userId);
         
         if(!userId){
@@ -45,7 +45,7 @@ export const libraryController = () : ILibraryController =>
     },
     editLibraryItem : async (req, res) => {
           //we use query for fetching id
-        const userId = req.query.userId;
+        const userId = req.body.user_id;
         //we use params for the /:id not body duh
         const libraryId = req.params.id;
         if(!userId){

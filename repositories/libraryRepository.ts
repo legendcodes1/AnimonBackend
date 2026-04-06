@@ -24,8 +24,8 @@ export const libaryRepository = {
     editLibrayItem : async(supabase:any, userId:any, libraryId: any, libraryData: any) => {
         return await supabase.
         from("Library")
-        .update(...libraryData)
-        .eq('id', userId)
+        .update(libraryData)
+        .eq('id', libraryId)
         .select()
     },
 
