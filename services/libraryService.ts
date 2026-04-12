@@ -12,13 +12,10 @@ export const libraryService = {
     } ,
 
     createLibraryItem : async(supabase: any, userId: any, payload: any) => {
+        console.log(payload)
         const cleanedData = {
             ...payload,
-            rating: payload.rating ? parseFloat(payload.rating) : null,
-            chapters: payload.chapters ? parseInt(payload.chapters) : null,
-            episodes: payload.episodes ? parseInt(payload.episodes) : null,
-            total_chapters: payload.total_chapters ? parseInt(payload.total_chapters) : null,
-            total_episodes: payload.total_episodes ? parseInt(payload.total_episodes) : null,
+            // rating: payload.rating ? parseFloat(payload.rating) : null,
         };
         const {data, error} = await libaryRepository.createLibraryItem(supabase, userId, cleanedData);
 

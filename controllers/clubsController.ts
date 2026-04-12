@@ -7,6 +7,7 @@ import type { Club } from '../types/club.type';
 interface  IclubsController {
   getClubs : (req: Request, res: Response) => any ,
   createClubs : (req: Request, res: Response) => any,
+  getClubById :  (req: Request, res: Response) => any,
   joinClub : (req: Request, res: Response) => any,
   deleteClub : (req: Request, res: Response) => any,
 }
@@ -18,9 +19,13 @@ export const clubsController = () : IclubsController =>
         return res.json(result);
         
       },
+
+      getClubById : async(req, res) => {
+        const clubId = req.params.id as string;
+        const result = await clubsService.getClubById(supabase, clubId)
+        return res.json(result);
+      },
         createClubs: async (req: Request, res: Response) => {
-   
-         
             const userId = req.body.userId
             console.log("Creating club with:", { userId, body: req.body })
             if (!userId) {
@@ -32,17 +37,27 @@ export const clubsController = () : IclubsController =>
               return res.status(500).json({ error: "Club service returned undefined" });
             }
     
-            return res.json(result)
+            return res.json(result[0]);
      
         },
-        
+
         joinClub : async (req, res) => {
-          if(!req.body.userId){
+          try {
+       
+          const user_id = req.params.user_id;
+          const group_id = req.params.group_id;
+          if(!user_id || Array.isArray(user_id) || !group_id || Array.isArray(group_id)){
             return res.status(400).json({ message: "User ID missing in token" });
           }
-          const result = await clubsService.joinClub(supabase, req.body);
-
+  
+          const result = await clubsService.joinClub(supabase, user_id, group_id);
+          
           return res.json(result)
+            
+          } catch (error) {
+            console.log(error);
+          }
+      
         },
 
         deleteClub : async (req: Request, res: Response) => {
