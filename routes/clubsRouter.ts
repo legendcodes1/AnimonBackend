@@ -1,32 +1,17 @@
 import { Router } from "express"
 import {clubsController} from "../controllers/clubsController"
 
-
 const router = Router()
 const controller = clubsController()
-// ---------------- GET ALL GROUPS FOR USER ----------------
-router.get("/", 
-  controller.getClubs
-);
 
-// GET SINGLE CLUB BY ID
-router.get("/:id", 
-  controller.getClubById
-);
-// ---------------- CREATE A NEW GROUP ----------------
-router.post("/", 
-  controller.createClubs
-);
-// // ---------------- JOIN A GROUP ----------------
-router.post("/:groupId/members/:userId", 
-  controller.joinClub
-);
+router.get("/", controller.getClubs);
+router.get("/:id", controller.getClubById);
+router.post("/", controller.createClubs);
 
 
-// // ---------------- DELETE GROUP ----------------
-router.delete("/:id", 
-  controller.deleteClub
-);
+router.post("/:id/members/:userId", controller.joinClub);
+router.get("/:id/members/:userId", controller.checkClub);
 
+router.delete("/:id", controller.deleteClub);
 
 export default router;
