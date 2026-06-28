@@ -1,0 +1,8 @@
+export interface Club {
+    name: string;
+    description: string;
+    group_avatar_url: string;
+    created_by: string;
+    Group_Members: any[];
+}
+//# sourceMappingURL=club.type.d.ts.map
